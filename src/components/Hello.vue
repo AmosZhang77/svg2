@@ -1,18 +1,19 @@
 <template>
-  <div class="hello">
-    <div @click="start">开始播放</div>
-    1111
+  <div class="learner">
+    <div @click="startPlay">开始播放</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
+  name: 'learner',
   data () {
+
     return {
       msg: 'Welcome to Your Vue.js App'
     }
-  }
+  },
+
 }
 </script>
 
