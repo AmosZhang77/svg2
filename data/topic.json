@@ -1,32 +1,32 @@
 {
     "courseName": "科学",
-    "rootTopicId": "808375F0-036D-8B93-CA62-DD0A71FA0E3E",
+    "rootTopicId": "F494237C-B323-7C51-7F0F-0D9CDFB5BE8C",
     "resource": {
         "canvas": {
-            "canvas": "http://test.sysfrend.com/assets/upload/resource/cvs/2017/07/15/5d26e6ecec57f3041fd7cf2d0731ccae.cvs",
-            "voiceRecord": "http://test.sysfrend.com/assets/upload/resource/aac/2017/07/15/5fa2af674f3bcc63c0422249c3f49c9a.aac",
+            "canvas": "http://test.sysfrend.com/assets/upload/resource/cvs/2017/07/19/1b8dd13f1102a08b1fa0b56c45db0ce6.cvs",
+            "voiceRecord": "http://test.sysfrend.com/assets/upload/resource/aac/2017/07/19/7b40bbc268fba225624e6294e10c0054.aac",
             "isNewCanvas": true,
             "media": [
                 {
-                    "id": "0BAC33D4-33C4-4A09-87D2-9C47A71E072B",
-                    "url": "http://test.sysfrend.com/assets/upload/resource/jpg/2017/07/15/3d31923761f053cc1a43ea30318be8d1.jpg"
+                    "id": "DFB0015D-C2CC-4588-B6C8-33EA9D520C1B",
+                    "url": "http://test.sysfrend.com/assets/upload/resource/jpg/2017/07/19/54849b0e6135e1895a7de0394d263de6.jpg"
                 }
             ],
-            "finalHeight": 453,
-            "finalWidth": 320,
+            "finalHeight": 906,
+            "finalWidth": 640,
             "canvasVersion": "2017001",
-            "thumb": "http://test.sysfrend.com/assets/upload/resource/jpg/2017/07/15/0bf4fea90ac6d52e8c4c4363926031b2.jpg"
+            "thumb": "http://test.sysfrend.com/assets/upload/resource/jpg/2017/07/19/1f7a5915fad90cf6d4c2013024125ad5.jpg"
         }
     },
     "author": "sebase",
     "isSelf": 1,
-    "comment": "这是啥？",
-    "topicId": "808375F0-036D-8B93-CA62-DD0A71FA0E3E",
+    "comment": "科科",
+    "topicId": "F494237C-B323-7C51-7F0F-0D9CDFB5BE8C",
     "gradeName": "小学",
     "interact": 1,
     "isInteract": 0,
-    "addTime": "2017-07-15 22:09:17",
-    "score": 0,
+    "addTime": "2017-07-19 21:04:20",
+    "score": 10,
     "replyNum": 0,
     "headImg": "http://test.sysfrend.com/assets/headimg/portrait.png"
 }

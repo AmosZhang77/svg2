@@ -6,7 +6,9 @@
     <div @click="unAES">解密</div><!--解密-->
     <div @click="base64">转进base64</div><!--解密-->
     <div @click="unBase64">转出base64</div><!--解密-->
-    <input type="file" id="zipData" @change="zipDataChange" ref="zipData"><span>导入</span>
+    <div @click="doWork">转入base64-解密-转出base64-解压</div><!--解密-->
+    <div @click="doWork10">加密解密</div><!--解密-->
+    <input type="file" id="data" @change="dataChange" ref="data"><span>导入</span>
   </div>
 </template>
 <!--<script type="text/javascript" src="../../data/aes/aes.js"></script>-->
@@ -21,6 +23,7 @@
    (c) 2009-2013 by Jeff Mott. All rights reserved.
    code.google.com/p/crypto-js/wiki/License
    */
+/*
   var CryptoJS=CryptoJS||function(u,p){var d={},l=d.lib={},s=function(){},t=l.Base={extend:function(a){s.prototype=this;var c=new s;a&&c.mixIn(a);c.hasOwnProperty("init")||(c.init=function(){c.$super.init.apply(this,arguments)});c.init.prototype=c;c.$super=this;return c},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var c in a)a.hasOwnProperty(c)&&(this[c]=a[c]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.init.prototype.extend(this)}},
       r=l.WordArray=t.extend({init:function(a,c){a=this.words=a||[];this.sigBytes=c!=p?c:4*a.length},toString:function(a){return(a||v).stringify(this)},concat:function(a){var c=this.words,e=a.words,j=this.sigBytes;a=a.sigBytes;this.clamp();if(j%4)for(var k=0;k<a;k++)c[j+k>>>2]|=(e[k>>>2]>>>24-8*(k%4)&255)<<24-8*((j+k)%4);else if(65535<e.length)for(k=0;k<a;k+=4)c[j+k>>>2]=e[k>>>2];else c.push.apply(c,e);this.sigBytes+=a;return this},clamp:function(){var a=this.words,c=this.sigBytes;a[c>>>2]&=4294967295<<
         32-8*(c%4);a.length=u.ceil(c/4)},clone:function(){var a=t.clone.call(this);a.words=this.words.slice(0);return a},random:function(a){for(var c=[],e=0;e<a;e+=4)c.push(4294967296*u.random()|0);return new r.init(c,a)}}),w=d.enc={},v=w.Hex={stringify:function(a){var c=a.words;a=a.sigBytes;for(var e=[],j=0;j<a;j++){var k=c[j>>>2]>>>24-8*(j%4)&255;e.push((k>>>4).toString(16));e.push((k&15).toString(16))}return e.join("")},parse:function(a){for(var c=a.length,e=[],j=0;j<c;j+=2)e[j>>>3]|=parseInt(a.substr(j,
@@ -50,6 +53,7 @@
     16,32,64,128,27,54],d=d.AES=p.extend({_doReset:function(){for(var a=this._key,c=a.words,d=a.sigBytes/4,a=4*((this._nRounds=d+6)+1),e=this._keySchedule=[],j=0;j<a;j++)if(j<d)e[j]=c[j];else{var k=e[j-1];j%d?6<d&&4==j%d&&(k=l[k>>>24]<<24|l[k>>>16&255]<<16|l[k>>>8&255]<<8|l[k&255]):(k=k<<8|k>>>24,k=l[k>>>24]<<24|l[k>>>16&255]<<16|l[k>>>8&255]<<8|l[k&255],k^=H[j/d|0]<<24);e[j]=e[j-d]^k}c=this._invKeySchedule=[];for(d=0;d<a;d++)j=a-d,k=d%4?e[j]:e[j-4],c[d]=4>d||4>=j?k:b[l[k>>>24]]^x[l[k>>>16&255]]^q[l[k>>>
     8&255]]^n[l[k&255]]},encryptBlock:function(a,b){this._doCryptBlock(a,b,this._keySchedule,t,r,w,v,l)},decryptBlock:function(a,c){var d=a[c+1];a[c+1]=a[c+3];a[c+3]=d;this._doCryptBlock(a,c,this._invKeySchedule,b,x,q,n,s);d=a[c+1];a[c+1]=a[c+3];a[c+3]=d},_doCryptBlock:function(a,b,c,d,e,j,l,f){for(var m=this._nRounds,g=a[b]^c[0],h=a[b+1]^c[1],k=a[b+2]^c[2],n=a[b+3]^c[3],p=4,r=1;r<m;r++)var q=d[g>>>24]^e[h>>>16&255]^j[k>>>8&255]^l[n&255]^c[p++],s=d[h>>>24]^e[k>>>16&255]^j[n>>>8&255]^l[g&255]^c[p++],t=
     d[k>>>24]^e[n>>>16&255]^j[g>>>8&255]^l[h&255]^c[p++],n=d[n>>>24]^e[g>>>16&255]^j[h>>>8&255]^l[k&255]^c[p++],g=q,h=s,k=t;q=(f[g>>>24]<<24|f[h>>>16&255]<<16|f[k>>>8&255]<<8|f[n&255])^c[p++];s=(f[h>>>24]<<24|f[k>>>16&255]<<16|f[n>>>8&255]<<8|f[g&255])^c[p++];t=(f[k>>>24]<<24|f[n>>>16&255]<<16|f[g>>>8&255]<<8|f[h&255])^c[p++];n=(f[n>>>24]<<24|f[g>>>16&255]<<16|f[h>>>8&255]<<8|f[k&255])^c[p++];a[b]=q;a[b+1]=s;a[b+2]=t;a[b+3]=n},keySize:8});u.AES=p._createHelper(d)})();
+*/
 
   /*
    CryptoJS v3.1.2
@@ -60,7 +64,7 @@
   /**
    * Electronic Codebook block mode.
    */
-  CryptoJS.mode.ECB = (function () {
+  /*CryptoJS.mode.ECB = (function () {
     var ECB = CryptoJS.lib.BlockCipherMode.extend();
 
     ECB.Encryptor = ECB.extend({
@@ -78,7 +82,7 @@
     return ECB;
   }());
 
-
+   */
 
 
   export default {
@@ -86,9 +90,11 @@
     data () {
 
       return {
-        zipDataFiles: [],
+        dataFiles: [],
+        dataFile: {},
         AESDataFiles: {},
         dateObj: {},
+        base64Data: "",
         msg: 'Welcome to Your Vue.js App'
       }
     },
@@ -111,11 +117,14 @@
       return url
     },
 
-  unZip(){
+  unZip(data){
         var _this = this;
         var zip1 = new JSZip();
-        zip1.loadAsync(this.zipDataFile)
+        //zip1.loadAsync(this.dataFile)
+        zip1.loadAsync(data)
           .then(function (file) {
+          	console.log(file);
+
             // you now have every files contained in the loaded zip
             zip1.file("canvas.json").async("string") // 此处是压缩包中的testTXT.txt文件，以string形式返回其内容，此时已经可以获取zip中的所有文件了
               .then(function (content) {
@@ -128,9 +137,9 @@
               });
           });
       },
-      unAES(){
+      unAES(dataFrom,keyIn){
         /*var zip1 = new JSZip();
-         zip1.loadAsync(this.zipDataFile)
+         zip1.loadAsync(this.dataFile)
          .then(function(file) {
          // you now have every files contained in the loaded zip
          zip1.file("testTXT.txt").async("string") // 此处是压缩包中的testTXT.txt文件，以string形式返回其内容，此时已经可以获取zip中的所有文件了
@@ -139,13 +148,63 @@
          alert(content)
          });
          });*/
-        var word = this.AESDataFiles;
-        console.log("解密");
-        var key = CryptoJS.enc.Utf8.parse("abcdefgabcdefg12");
+        //var word = this.AESDataFiles;
 
-        var decrypt = CryptoJS.AES.decrypt(word, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+        var CryptoJS = require("crypto-js");
+        /*require.config({
+          paths: {
+            'crypto-js': 'path-to/bower_components/crypto-js/crypto-js'
+          }
+        });*/
+        var data = dataFrom;
+        data = {a:1,b:2,c:3}
+        console.log("dataForm",dataFrom);
+
+// Encrypt
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), keyIn);
+        console.log("加密",ciphertext);
+
+// Decrypt
+        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
+        //alert(3);
+        console.log("解密后1",bytes.toString(CryptoJS.enc.Utf8));
+
+        var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        console.log("解密后",decryptedData);
+
+
+
+
+
+/*// Encrypt
+        var ciphertext = CryptoJS.AES.encrypt(data, keyIn);
+
+// Decrypt
+        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
+        var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        console.log("解密后",plaintext);*/
+
+
+
+
+
+
+        /*var word = data;
+        console.log("解密",data);
+        var key = CryptoJS.enc.Utf8.parse(keyIn);
+        var iv = CryptoJS.enc.Utf8.parse(0);//('十六位十六进制数作为秘钥偏移量');
+alert(3);
+        var decrypt = CryptoJS.AES.decrypt(word, key, {iv:iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+        alert(5);
         var r = CryptoJS.enc.Utf8.stringify(decrypt).toString();
-        console.log("解密后",r);
+        alert(6);
+
+
+
+
+        console.log("解密后",decrypt);
+        console.log("解密后",r);*/
 
       },
       AES(){
@@ -164,27 +223,77 @@
         this.AESDataFiles = encrypted.toString();
         console.log("加密后",this.AESDataFiles);
       },
-      zipDataChange(){
+      dataChange(){
         //alert(1);
-        if (this.$refs.zipData.files && this.$refs.zipData.files.length) {
-          this.zipDataFile = this.$refs.zipData.files[0];
-          console.log("zipDataFiles", this.zipDataFile);
-          console.log("name", this.zipDataFile.name);
-          console.log("size", this.zipDataFile.size);
-          console.log("type", this.zipDataFile.type);
+        if (this.$refs.data.files && this.$refs.data.files.length) {
+          this.dataFile = this.$refs.data.files[0];
+          console.log("dataFile", this.dataFile);
+          console.log("name", this.dataFile.name);
+          console.log("size", this.dataFile.size);
+          console.log("type", this.dataFile.type);
         }
       },
-      base64(){
+      base64(data){
+      	var _this = this;
         var reader = new FileReader();
-        reader.readAsDataURL(this.zipDataFile);
+        reader.readAsDataURL(data);
         reader.onload = function(e){
           console.log("base64格式内容",e.target.result);
           //$('#file_base64').val(e.target.result);
+          _this.base64Data = e.target.result;
+          _this.doWork2(e.target.result);
+          //return e.target.result
         };
       },
-      unBase64(){
+      unBase64(data){
+        var result = atob(data);
+        console.log("解密结果",result);
+        return result
+      },
+      doWork(){
+      	console.log("dataFile",this.dataFile);
+        //var result1 = this.base64(this.dataFile);
+        //console.log("result1",result1);
+        //var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTBTRN%^J&^J&^%");
+
+        //var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTB");//TRN%^J&^J&^%";
+        //var keyIn = "@#R$RBEH^%U&JRTB";//TRN%^J&^J&^%";
+        var keyIn = "abcdefgabcdefg12";//TRN%^J&^J&^%";
+
+        //var keyIn = "@#R$RBEH^%U&JRTBTRN%^J&^J&^%";
+        var result2 = this.unAES(this.dataFile,keyIn);
+       // var result2 = this.unAES("一二三",keyIn);
+        console.log("result2",result2);
 
       },
+      doWork2(base64Data){
+//alert(2);
+        console.log("result1",base64Data);
+
+        //var keyIn = "@#R$RBEH^%U&JRTB";//TRN%^J&^J&^%";
+
+        //var keyIn = "@#R$RBEH^%U&JRTBTRN%^J&^J&^%";
+        var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTB");//TRN%^J&^J&^%";
+        //var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTBTRN%^J&^J&^%");
+
+        /*var result2 = this.unAES(base64Data,keyIn);
+        console.log("result2",result2);
+*/
+      },
+      doWork10(){
+        var CryptoJS = require("crypto-js");
+
+        var data = this.dataFile;
+
+// Encrypt
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key 123');
+
+// Decrypt
+        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
+        var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        console.log(decryptedData);
+      }
     }
 
 
