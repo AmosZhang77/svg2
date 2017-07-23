@@ -10,21 +10,22 @@
     <div @click="doWork10">加密解密</div><!--解密-->
     <input type="file" id="data" @change="dataChange" ref="data"><span>导入</span>
 
+
+    <div @click="startPlay">开始播放</div>
     <div class="topBar" :style="{height:svgHeight,width:svgWidth}" id="app">
       <svg width="100%" height="100%" version="1.1"
            xmlns="http://www.w3.org/2000/svg">
         <path :fill="filterColor(svgFront.color)" v-for="(svgFront,index) in svgFronts"
               :stroke="svgFront.id"
               :stroke-width="svgFront.width"
-              :color="filterColor(svgFront.color)"
+
               :d="svgFront.path"
+        /><!--:color="filterColor(svgFront.color)"-->
+        <path :fill="filterColor(svgR.color)" v-for="(svgR,index) in svgRs"
+              :stroke="svgR.id"
+              :stroke-width="svgR.width"
+              :d="svgR.path"
         />
-        <!--<path fill="none"  v-for="(svgR,index) in svgRs"
-              stroke="#AAA"
-              stroke-width="3.5"
-              color="FFFFBB00"
-              d="M88.5,176.5L105.5,173.0L128.5,159.5L133.0,153.5L136.0,144.5L134.0,142.5L127.5,142.0L122.0,142.5L115.0,146.5L113.5,152.0L113.5,157.5L119.0,162.5L129.0,167.0L136.5,168.5L147.0,169.5L154.0,168.5L161.0,161.5L164.5,154.5L166.0,149.0L167.0,146.5L168.0,146.0L170.0,148.5L175.0,156.0L184.5,166.0L199.5,174.5L213.0,176.0L226.5,176.0L237.5,173.5L243.5,171.5L249.5,170.5"
-        />-->
       </svg>
     </div>
   </div>
@@ -34,14 +35,17 @@
   var JSZip = require("jszip");
   import mixinGlobal from '../mixin/mixinGlobal.js'
 
-import svgData from '../../data/canvas.json';
+  import svgData from '../../data/canvas.json';
   export default {
     name: 'learner',
     data () {
-console.log(svgData);
-var svgHeight = svgData.initialHeight*2+"px";
-var svgWidth = svgData.initialWidth*2+"px";
-var svgFounts = svgData.linesBeforeRecord;
+      console.log(svgData);
+      var svgHeight = svgData.initialHeight * 2 + "px";
+      var svgWidth = svgData.initialWidth * 2 + "px";
+      var svgFounts = svgData.linesBeforeRecord;
+      var svgRs = [];
+      console.log(svgData);
+
 
       return {
         dataFiles: [],
@@ -50,40 +54,91 @@ var svgFounts = svgData.linesBeforeRecord;
         dateObj: {},
         base64Data: "",
 
-        svgHeight:svgHeight,
-        svgWidth:svgWidth,
-        svgFronts:svgFounts,
-        svgRs:svgFounts,
-        svgAll:svgFounts
+        svgHeight: svgHeight,
+        svgWidth: svgWidth,
+        svgFronts: svgFounts,
+        svgRs: [],
+        svgAll: [],
+        svgAllPlay: [],
+
+        startTimeTime:0,
+        startTimeDraw:0,
       }
     },
-    mixins:[mixinGlobal],
+    mixins: [mixinGlobal],
+   /* mounted:function() {
+
+    },*/
     methods: {
+      drawInterval: function() {
+
+        setInterval(this.drawIntervalFun, 500)
+      },
+      drawIntervalFun: function() {
+        console.log(1)
+        var now = {};
+        for(let i=0;i<this.svgAllPlay.length; i++){
+          console.log(2)
+           now = new Date();
+          console.log(this.svgAllPlay[i].startTime,this.startTimeDraw,now.getTime()- this.startTimeTime);
+            if((this.svgAllPlay[i].startTime - this.startTimeDraw) < (now.getTime()- this.startTimeTime)){
+              console.log("if",this.svgAllPlay[i]);
+              this.svgRs.push(this.svgAllPlay[i]);
+              this.svgAllPlay.splice(i,1);
+              i--
+            }
+
+
+        }
+      },
       startPlay(){
 
+
+        var tempOne = {};
+        var count = 0;
+        for (let i = 0; i < svgData.recordedOperations.length; i++) {
+
+          if (svgData.recordedOperations[i].type == 1) {
+            if (count == 0) {
+              this.startTimeDraw = svgData.recordedOperations[i].startTime;
+            }
+            console.log("path", JSON.parse(svgData.recordedOperations[i].content));
+            tempOne = JSON.parse(svgData.recordedOperations[i].content);
+            tempOne.startTime = svgData.recordedOperations[i].startTime;
+            tempOne.endTime = svgData.recordedOperations[i].endTime;
+            this.svgAll.push(tempOne);
+            count++;
+          }
+        }
+        this.svgAllPlay = this.svgAll;
+        var date = new Date();
+        console.log(date);
+        this.startTimeTime = date.getTime();
+
+        this.drawInterval();
       },
       getObjectURL(file) {
-      var url = null;
-      if (window.createObjectURL != undefined) {
-        url = window.createObjectURL(file);
-        console.log("imgUrl1");
-      } else if (window.URL != undefined) {
-        url = window.URL.createObjectURL(file);//新ie火狐谷歌都走这
-        console.log("imgUrl2");
-      } else if (window.webkitURL != undefined) {
-        url = window.webkitURL.createObjectURL(file);
-        console.log("imgUrl3");
-      }
-      return url
-    },
+        var url = null;
+        if (window.createObjectURL != undefined) {
+          url = window.createObjectURL(file);
+          console.log("imgUrl1");
+        } else if (window.URL != undefined) {
+          url = window.URL.createObjectURL(file);//新ie火狐谷歌都走这
+          console.log("imgUrl2");
+        } else if (window.webkitURL != undefined) {
+          url = window.webkitURL.createObjectURL(file);
+          console.log("imgUrl3");
+        }
+        return url
+      },
 
-  unZip(data){
+      unZip(data){
         var _this = this;
         var zip1 = new JSZip();
         //zip1.loadAsync(this.dataFile)
         zip1.loadAsync(data)
           .then(function (file) {
-          	console.log(file);
+            console.log(file);
 
             // you now have every files contained in the loaded zip
             zip1.file("canvas.json").async("string") // 此处是压缩包中的testTXT.txt文件，以string形式返回其内容，此时已经可以获取zip中的所有文件了
@@ -92,12 +147,12 @@ var svgFounts = svgData.linesBeforeRecord;
                 //alert(content)
                 _this.dataObjStr = content;
                 _this.dataObj = JSON.parse(content);
-                console.log("解压后对象",_this.dataObj);
-                console.log("解压后字符串",_this.dataObjStr);
+                console.log("解压后对象", _this.dataObj);
+                console.log("解压后字符串", _this.dataObjStr);
               });
           });
       },
-      unAES(dataFrom,keyIn){
+      unAES(dataFrom, keyIn){
         /*var zip1 = new JSZip();
          zip1.loadAsync(this.dataFile)
          .then(function(file) {
@@ -112,68 +167,58 @@ var svgFounts = svgData.linesBeforeRecord;
 
         var CryptoJS = require("crypto-js");
         /*require.config({
-          paths: {
-            'crypto-js': 'path-to/bower_components/crypto-js/crypto-js'
-          }
-        });*/
+         paths: {
+         'crypto-js': 'path-to/bower_components/crypto-js/crypto-js'
+         }
+         });*/
         var data = dataFrom;
-        data = {a:1,b:2,c:3}
-        console.log("dataForm",dataFrom);
+        data = {a: 1, b: 2, c: 3}
+        console.log("dataForm", dataFrom);
 
 // Encrypt
         var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), keyIn);
-        console.log("加密",ciphertext);
+        console.log("加密", ciphertext);
 
 // Decrypt
-        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
+        var bytes = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
         //alert(3);
-        console.log("解密后1",bytes.toString(CryptoJS.enc.Utf8));
+        console.log("解密后1", bytes.toString(CryptoJS.enc.Utf8));
 
         var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-        console.log("解密后",decryptedData);
+        console.log("解密后", decryptedData);
 
 
+        /*// Encrypt
+         var ciphertext = CryptoJS.AES.encrypt(data, keyIn);
 
-
-
-/*// Encrypt
-        var ciphertext = CryptoJS.AES.encrypt(data, keyIn);
-
-// Decrypt
-        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
-        var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-        console.log("解密后",plaintext);*/
-
-
-
-
+         // Decrypt
+         var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), keyIn);
+         var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+         console.log("解密后",plaintext);*/
 
 
         /*var word = data;
-        console.log("解密",data);
-        var key = CryptoJS.enc.Utf8.parse(keyIn);
-        var iv = CryptoJS.enc.Utf8.parse(0);//('十六位十六进制数作为秘钥偏移量');
-alert(3);
-        var decrypt = CryptoJS.AES.decrypt(word, key, {iv:iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
-        alert(5);
-        var r = CryptoJS.enc.Utf8.stringify(decrypt).toString();
-        alert(6);
+         console.log("解密",data);
+         var key = CryptoJS.enc.Utf8.parse(keyIn);
+         var iv = CryptoJS.enc.Utf8.parse(0);//('十六位十六进制数作为秘钥偏移量');
+         alert(3);
+         var decrypt = CryptoJS.AES.decrypt(word, key, {iv:iv, mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+         alert(5);
+         var r = CryptoJS.enc.Utf8.stringify(decrypt).toString();
+         alert(6);
 
-
-
-
-        console.log("解密后",decrypt);
-        console.log("解密后",r);*/
+         console.log("解密后",decrypt);
+         console.log("解密后",r);*/
 
       },
       AES(){
         //console.log(CryptoJS)
 
         var word = this.dataObj;
-        console.log("this.dataObjStr",this.dataObjStr);
+        console.log("this.dataObjStr", this.dataObjStr);
         //var word = String(this.dataObjStr);
-        console.log("word",word);
+        console.log("word", word);
 
         //var word = "你好";
         var key = CryptoJS.enc.Utf8.parse("abcdefgabcdefg12");
@@ -181,7 +226,7 @@ alert(3);
         var srcs = CryptoJS.enc.Utf8.parse(word);
         var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
         this.AESDataFiles = encrypted.toString();
-        console.log("加密后",this.AESDataFiles);
+        console.log("加密后", this.AESDataFiles);
       },
       dataChange(){
         //alert(1);
@@ -194,11 +239,11 @@ alert(3);
         }
       },
       base64(data){
-      	var _this = this;
+        var _this = this;
         var reader = new FileReader();
         reader.readAsDataURL(data);
-        reader.onload = function(e){
-          console.log("base64格式内容",e.target.result);
+        reader.onload = function (e) {
+          console.log("base64格式内容", e.target.result);
           //$('#file_base64').val(e.target.result);
           _this.base64Data = e.target.result;
           _this.doWork2(e.target.result);
@@ -207,11 +252,11 @@ alert(3);
       },
       unBase64(data){
         var result = atob(data);
-        console.log("解密结果",result);
+        console.log("解密结果", result);
         return result
       },
       doWork(){
-      	console.log("dataFile",this.dataFile);
+        console.log("dataFile", this.dataFile);
         //var result1 = this.base64(this.dataFile);
         //console.log("result1",result1);
         //var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTBTRN%^J&^J&^%");
@@ -221,14 +266,14 @@ alert(3);
         var keyIn = "abcdefgabcdefg12";//TRN%^J&^J&^%";
 
         //var keyIn = "@#R$RBEH^%U&JRTBTRN%^J&^J&^%";
-        var result2 = this.unAES(this.dataFile,keyIn);
-       // var result2 = this.unAES("一二三",keyIn);
-        console.log("result2",result2);
+        var result2 = this.unAES(this.dataFile, keyIn);
+        // var result2 = this.unAES("一二三",keyIn);
+        console.log("result2", result2);
 
       },
       doWork2(base64Data){
 //alert(2);
-        console.log("result1",base64Data);
+        console.log("result1", base64Data);
 
         //var keyIn = "@#R$RBEH^%U&JRTB";//TRN%^J&^J&^%";
 
@@ -237,8 +282,8 @@ alert(3);
         //var keyIn = CryptoJS.enc.Utf8.parse("@#R$RBEH^%U&JRTBTRN%^J&^J&^%");
 
         /*var result2 = this.unAES(base64Data,keyIn);
-        console.log("result2",result2);
-*/
+         console.log("result2",result2);
+         */
       },
       doWork10(){
         var CryptoJS = require("crypto-js");
@@ -249,7 +294,7 @@ alert(3);
         var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key 123');
 
 // Decrypt
-        var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
+        var bytes = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
         var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
         console.log(decryptedData);
