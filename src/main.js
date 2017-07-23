@@ -3,8 +3,33 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+Vue.filter("color", function (value) {
+  if (!value && value != 0) {
+    return ""
+  }
+  let result = "";
+  result = "#"+value.slice(0,4);
+  return result;
+});
+Vue.prototype.filterColor = function (valve) {
+  if (!value && value != 0) {
+    return ""
+  }
+  let result = "";
+  result = "#"+value.slice(0,4);
+  return result;
+};
+global.filterColor = function (valve) {
+  if (!value && value != 0) {
+    return ""
+  }
+  let result = "";
+  result = "#"+value.slice(0,4);
+  return result;
+};
 
-Vue.config.productionTip = false
+
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
@@ -12,4 +37,4 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+});
