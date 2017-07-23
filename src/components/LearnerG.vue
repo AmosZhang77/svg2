@@ -10,28 +10,39 @@
     <div @click="doWork10">加密解密</div><!--解密-->
     <input type="file" id="data" @change="dataChange" ref="data"><span>导入</span>
 
-    <div :style="{height:svgHeight,width:svgWidth}">
-      <svg width="100%" height="100%">
-        <path v-for="(svgR,index) in svgRs" fill="none"
+    <div class="topBar" :style="{height:svgHeight,width:svgWidth}" id="app">
+      <svg width="100%" height="100%" version="1.1"
+           xmlns="http://www.w3.org/2000/svg">
+        <path :fill="filterColor(svgFront.color)" v-for="(svgFront,index) in svgFronts"
+              :stroke="svgFront.id"
+              :stroke-width="svgFront.width"
+              :color="filterColor(svgFront.color)"
+              :d="svgFront.path"
+        />
+        <!--<path fill="none"  v-for="(svgR,index) in svgRs"
               stroke="#AAA"
               stroke-width="3.5"
               color="FFFFBB00"
               d="M88.5,176.5L105.5,173.0L128.5,159.5L133.0,153.5L136.0,144.5L134.0,142.5L127.5,142.0L122.0,142.5L115.0,146.5L113.5,152.0L113.5,157.5L119.0,162.5L129.0,167.0L136.5,168.5L147.0,169.5L154.0,168.5L161.0,161.5L164.5,154.5L166.0,149.0L167.0,146.5L168.0,146.0L170.0,148.5L175.0,156.0L184.5,166.0L199.5,174.5L213.0,176.0L226.5,176.0L237.5,173.5L243.5,171.5L249.5,170.5"
-        />
+        />-->
       </svg>
     </div>
   </div>
 </template>
-<!--<script type="text/javascript" src="../../data/aes/aes.js"></script>-->
-<!--<script type="text/javascript" src="../../data/aes/mode-ecb.js"></script>-->
 <script>
   //import CryptoJS from '../../data/aes/aes.js'
   var JSZip = require("jszip");
-  import canvasAll from '../../data/canvas.json'
+  import mixinGlobal from '../mixin/mixinGlobal.js'
+
+import svgData from '../../data/canvas.json';
   export default {
     name: 'learner',
     data () {
-console.log(canvasAll);
+console.log(svgData);
+var svgHeight = svgData.initialHeight*2+"px";
+var svgWidth = svgData.initialWidth*2+"px";
+var svgFounts = svgData.linesBeforeRecord;
+
       return {
         dataFiles: [],
         dataFile: {},
@@ -39,15 +50,14 @@ console.log(canvasAll);
         dateObj: {},
         base64Data: "",
 
-
-
-        svgHeight: 0,
-        svgWidth: 0,
-        svgFounts:[],
-        svgAll:[],
-        svgRs:[],
+        svgHeight:svgHeight,
+        svgWidth:svgWidth,
+        svgFronts:svgFounts,
+        svgRs:svgFounts,
+        svgAll:svgFounts
       }
     },
+    mixins:[mixinGlobal],
     methods: {
       startPlay(){
 
